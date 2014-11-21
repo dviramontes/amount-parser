@@ -19,21 +19,20 @@
 (def tens     {20 "twenty", 30 "thirty",  40 "fourty", 50 "fifty",
                60 "sixty" , 70 "seventy", 80 "eighty", 90 "ninety"})
 
-(conj [] (tens (count-tens 22)) (zero-to-nineteen 2))
 
 (defn count-tens [n]
   (* (int (/ n 10)) 10))
-
-(count-tens 30)
 
 (defn count-hundreds [n]
   (* (int (/ n 100))) 100)
 
 (defn get-n-after-decimal-point [n]
+
   " Get .00 digits,
     up to 2 decimal places? :("
-  (int
-   (* ;; make it a whole number
+
+  (int ;; make it a whole number
+   (*
      (read-string ;; make it a number again
        (format "0%s"
                (first (rest (re-find #"\d+(\.\d{1,2})?" (str n)))))) 100)))
@@ -41,11 +40,15 @@
 (get-n-after-decimal-point 2.10) ;; => 10
 (get-n-after-decimal-point 2.01) ;; => 1
 
-(defn digit-parser [x & [power]]
+
+(defn single-digit-parser [x & [power]]
   (let [p (or power 10)]
   (rem x (or power 10))))
 
-(digit-parser 12)
+(single-digit-parser 12)
+
+(defn super-n-formater [n] ;; naming is hard ? :?
+  (apply str (conj [] (tens (count-tens n)) "-" (zero-to-nineteen (single-digit-parser n)))))
 
 (defn amount [n]
 
@@ -56,14 +59,14 @@
          answer (if (not (number? n)) :not-a-number
                  (if (rational? n)
                    ((fn [r] ;; rational
-                      (
+                      (let
                         [tens-fiter (and (>= r 20) (<= r 99))
                          hundreds-filter (and (>= r 100) (<= r 999))])
                         (cond
                          (<= r 19) (zero-to-nineteen r)
                          (and (zero? (mod n 10)) 'tens-fiter)  (tens (count-tens n))
                          (and (zero? (mod n 100)) 'hundreds-filter) (tens (count-tens n))
-                         ;;'(tens-fiter) "tes"
+                         '(tens-fiter) (super-n-formater r)
                         )) n)
                     ((fn [i] ;; irrational
                        :irrational
@@ -72,10 +75,11 @@
       (println answer)
 
       (when (not= answer :not-a-number)
-        (str
-          (format "%s dollars :: %d" answer n)))))
+        (if (= answer "one")
+        (str (format "%s dollar :: %d" answer n)) ;; the singular case
+        (str (format "%s dollars :: %d" answer n)))))) ;; the plural case
 
-(amount 20)
+(amount 1)
 
 
 
