@@ -7,11 +7,27 @@
   (println "Hello, World!"))
 
 
+(def zero-to-nineteen
+                 {0 "zero"
+                  1 "one",  2 "two",  3 "three",  4 "four",
+                  5 "five", 6 "six",  7 "seven",  8 "eight",
+                  9 "nine", 10 "ten", 11 "eleven",12 "twelve",
+                  13 "thirteen", 14 "fourteen",   15 "fifteen",
+                  16 "sixteen", 17 "sevente", 18 "eighteen",
+                  19 "nineteen"})
+
+(def tens     {20 "twenty", 30 "thirty",  40 "fourty", 50 "fifty",
+               60 "sixty" , 70 "seventy", 80 "eighty", 90 "ninety"})
+
+(conj [] (tens (count-tens 22)) (zero-to-nineteen 2))
+
 (defn count-tens [n]
-  (int (/ n 10)))
+  (* (int (/ n 10)) 10))
+
+(count-tens 30)
 
 (defn count-hundreds [n]
-  (int (/ n 100)))
+  (* (int (/ n 100))) 100)
 
 (defn get-n-after-decimal-point [n]
   " Get .00 digits,
@@ -29,36 +45,28 @@
   (let [p (or power 10)]
   (rem x (or power 10))))
 
-(digit-parser 213 100)
+(digit-parser 12)
 
 (defn amount [n]
 
   "Accepts an amount and convert it to the appropriate string Dollar representation."
 
-  (let [ zero-to-nineteen
-                 {0 "zero"
-                  1 "one",  2 "two",  3 "three",  4 "four",
-                  5 "five", 6 "six",  7 "seven",  8 "eight",
-                  9 "nine", 10 "ten", 11 "eleven",12 "twelve",
-                  13 "thirteen", 14 "fourteen",   15 "fifteen",
-                  16 "sixteen", 17 "sevente", 18 "eighteen",
-                  19 "nineteen"}
-
-         tens {20 "twenty", 30 "thirty", 40 "fourty", 50 "fifty",
-               60 "sixty" , 70 "seventy", 80 "eighty", 90 "ninety"}
-
-
+  (let [
          ;; look for rational numbers if not then ...
          answer (if (not (number? n)) :not-a-number
                  (if (rational? n)
-                   ((fn [rational]
-                      (cond
-                       (<= rational 19) (zero-to-nineteen rational)
-                       (and (zero? (mod n 10)) (>= 20) (<= 99)) (tens (* (count-tens n) 10))
-                       (and (zero? (mod n 100))(>= 100) (<= 999)) (tens (* (count-tens n) 100))
-                      )) n)
-                   ((fn [irrational]
-                      :irrational
+                   ((fn [r] ;; rational
+                      (
+                        [tens-fiter (and (>= r 20) (<= r 99))
+                         hundreds-filter (and (>= r 100) (<= r 999))])
+                        (cond
+                         (<= r 19) (zero-to-nineteen r)
+                         (and (zero? (mod n 10)) 'tens-fiter)  (tens (count-tens n))
+                         (and (zero? (mod n 100)) 'hundreds-filter) (tens (count-tens n))
+                         ;;'(tens-fiter) "tes"
+                        )) n)
+                    ((fn [i] ;; irrational
+                       :irrational
                        ) n)))]
 
       (println answer)
@@ -67,7 +75,9 @@
         (str
           (format "%s dollars :: %d" answer n)))))
 
-(amount 3)
+(amount 20)
+
+
 
 
 
