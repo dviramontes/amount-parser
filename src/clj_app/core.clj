@@ -6,7 +6,6 @@
   [& args]
   (println "Hello, World!"))
 
-
 (def zero-to-nineteen
                  {0 "zero"
                   1 "one",  2 "two",  3 "three",  4 "four",
@@ -19,12 +18,13 @@
 (def tens     {20 "twenty", 30 "thirty",  40 "fourty", 50 "fifty",
                60 "sixty" , 70 "seventy", 80 "eighty", 90 "ninety"})
 
-
 (defn count-tens [n]
   (* (int (/ n 10)) 10))
 
 (defn count-hundreds [n]
-  (* (int (/ n 100))) 100)
+  (int (/ n 100)))
+
+(count-hundreds 100)
 
 (defn get-n-after-decimal-point [n]
 
@@ -43,12 +43,18 @@
 
 (defn single-digit-parser [x & [power]]
   (let [p (or power 10)]
-  (rem x (or power 10))))
+  (rem x p)))
 
-(single-digit-parser 12)
+(single-digit-parser 122 100)
 
-(defn super-n-formater [n] ;; naming is hard ? :?
-  (apply str (conj [] (tens (count-tens n)) "-" (zero-to-nineteen (single-digit-parser n)))))
+(defn final-tens-formater [n] ;; naming is hard ? :?
+  (str (tens (count-tens n)) "-" (zero-to-nineteen (single-digit-parser n))))
+
+(defn final-hundreds-formater [n f]
+  (if (zero? (mod n 100))
+    (str (zero-to-nineteen (count-hundreds n)) " hundred dollars")
+    (str (zero-to-nineteen (count-hundreds n)) " hundred and " (f (single-digit-parser n 100)))))
+
 
 (defn amount [n]
 
@@ -58,7 +64,7 @@
          ;; look for rational numbers if not then ...
          answer (if (not (number? n)) :not-a-number
                  (if (rational? n)
-                   ((fn [r] ;; rational
+                   ((fn [r] ;; rational numbers
                       (let
                         [tens-fiter (and (>= r 20) (<= r 99))
                          hundreds-filter (and (>= r 100) (<= r 999))])
@@ -66,9 +72,10 @@
                          (<= r 19) (zero-to-nineteen r)
                          (and (zero? (mod n 10)) 'tens-fiter)  (tens (count-tens n))
                          (and (zero? (mod n 100)) 'hundreds-filter) (tens (count-tens n))
-                         '(tens-fiter) (super-n-formater r)
+                         '(tens-fiter) (final-tens-formater r)
+                         '(hundreds-filter) (final-hundreds-formater r amount)
                         )) n)
-                    ((fn [i] ;; irrational
+                    ((fn [i] ;; irrational numbers
                        :irrational
                        ) n)))]
 
@@ -79,9 +86,10 @@
         (str (format "%s dollar :: %d" answer n)) ;; the singular case
         (str (format "%s dollars :: %d" answer n)))))) ;; the plural case
 
-(amount 1)
+(amount 200)
 
+(final-tens-formater 23)
 
-
+(final-hundreds-formater 455 amount)
 
 
