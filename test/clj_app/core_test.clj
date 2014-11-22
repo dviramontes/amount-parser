@@ -31,3 +31,7 @@
   (testing "Given 250, should result in
     the str two hundred and fifty dollars"
     (is (= (final-hundreds-formater 250 amount) "two hundred and fifty dollars"))))
+
+(deftest amount-test
+  (testing "Given 1, should result in 1 [singular] dollar"
+    (is (= (amount 1) "one dollar"))))

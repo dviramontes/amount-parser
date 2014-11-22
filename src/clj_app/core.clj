@@ -45,13 +45,14 @@
   (str (tens (decimate-tens n)) "-" (zero-to-nineteen (single-digit-parser n))))
 
 (defn final-hundreds-formater [n fun]
+  (if (zero? (mod n 100))
   (str (zero-to-nineteen (decimate-hundreds n)) " hundred dollars")
-  (str (zero-to-nineteen (decimate-hundreds n)) " hundred and " (fun (single-digit-parser n 100))))
+    (str (zero-to-nineteen (decimate-hundreds n)) " hundred and " (fun (single-digit-parser n 100)))))
 
 (defn final-cents-formatter [n]
   (str (final-tens-formater (get-n-after-decimal-point n))))
 
-;;(final-hundreds-formater 250 amount)
+(final-tens-formater 20)
 
 (defn amount [n]
 
@@ -69,8 +70,8 @@
                        (<= r 19) (zero-to-nineteen r)
                        (and (zero? (mod n 10)) 'tens-fiter)  (tens (decimate-tens n))
                        (and (zero? (mod n 100)) 'hundreds-filter) (tens (decimate-tens n))
-                       '(tens-fiter) (final-tens-formater r)
-                       '(hundreds-filter) (final-hundreds-formater r amount))) n)
+                       'tens-fiter (final-tens-formater r)
+                       'hundreds-filter (final-hundreds-formater r amount))) n)
                    ((fn [i] ;; irrational numbers
                       (if
                         (zero? i) nil
@@ -78,13 +79,15 @@
                         )) n)))]
 
     (println answer)
-    ;; side-effecting
+    ;; side-effecting?
     (when (not= answer :not-a-number)
       (if (= answer "one")
         (str (format "%s dollar" answer)) ;; the singular case
         (str (format "%s dollars" answer)))))) ;; the plural case
 
 
+(amount 1)
 
-
-
+(final-tens-formater 22)
+(final-hundreds-formater 1 amount)
+(final-hundreds-formater 999 amount)
