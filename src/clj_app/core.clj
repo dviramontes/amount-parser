@@ -1,11 +1,6 @@
 (ns clj-app.core
   (:gen-class))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
-
 (def zero-to-nineteen
   {0 "zero"
    1 "one",  2 "two",  3 "three",  4 "four",
@@ -29,10 +24,8 @@
 
 (defn get-n-after-decimal-point [n]
 
-  " Get .00 digits,
-  up to 2 decimal places :/
-  sorry for the regex, taken
-  from SO"
+  " Get x.0 digits,
+  up to 2 decimal places"
 
   (int ;; make it a whole number
    (* (read-string ;; make it a number again
@@ -53,30 +46,57 @@
   (and (>= n 1000) (<= n 9999)))
 
 (defn filter-amount [n]
+
+  "Defines the filtering rules for determining Dollar amount"
+
   (cond
    (not (number? n)) :not-a-number
    (rational? n)(do
                   (cond
                    (<= n 19) (zero-to-nineteen n)
-                   (and (zero? (mod n 10))  (tens-filter n)) (tens (decimate-tens n))
-                   (and (zero? (mod n 100)) (hundreds-filter n)) (str (zero-to-nineteen (decimate-hundreds n)) " hundred")
-                   (and (zero? (mod n 100)) (thousands-filter n)) (str (zero-to-nineteen (decimate-thousands n)) " thousand")
-                   (tens-filter n)(str (tens (decimate-tens n)) "-" (zero-to-nineteen (single-digit-parser n)))
-                   (hundreds-filter n) (str (zero-to-nineteen (decimate-hundreds n)) " hundred and " (filter-amount (single-digit-parser n 100)))
-                   (thousands-filter n) (str (zero-to-nineteen (decimate-hundreds n)) " hundred and " (filter-amount (single-digit-parser n 100)))))
-   (not (rational? n))()))
+                   (and (zero? (mod n 10))   (tens-filter n)) (tens (decimate-tens n))
+                   (and (zero? (mod n 100))  (hundreds-filter n)) (str (zero-to-nineteen (decimate-hundreds n)) " hundred")
+                   (and (zero? (mod n 1000)) (thousands-filter n)) (str (zero-to-nineteen (decimate-thousands n)) " thousand")
+                   (tens-filter      n) (str (tens (decimate-tens n)) "-" (zero-to-nineteen (single-digit-parser n)))
+                   (hundreds-filter  n) (str (zero-to-nineteen (decimate-hundreds n)) " hundred and " (filter-amount (single-digit-parser n 100)))
+                   (thousands-filter n) (do
+                                          (if (<= (single-digit-parser n 1000) 99)
+                                            (str (zero-to-nineteen (decimate-thousands n)) " thousand and "  (filter-amount (single-digit-parser n 1000)))
+                                            (str (zero-to-nineteen (decimate-thousands n)) " thousand "  (filter-amount (single-digit-parser n 1000)))
+                                            ))))
+   (not (rational? n))
+   (do
+     (str (filter-amount (int (rationalize n))) " dollars with " (get-n-after-decimal-point n) "/100 cents"))))
 
 
 (defn amount [x]
 
-  "Accepts an amount and convert it to the appropriate string Dollar representation."
+  " Given an amount, it converts it to the appropriate string Dollar / Cent representation."
 
-    (let [answer (filter-amount x)]
-    (do
-      (when (not= answer :not-a-number)
-        (if (= answer "one")
-          (format "%s dollar" answer)        ;; the singular case
-          (format "%s dollars" answer)))))) ;; the plural case
+  (let [answer (filter-amount x)
+        cap #(clojure.string/capitalize %)]
+    (when (not= answer :not-a-number)
+      (if (rational? x)
+        (do
+          (if (= answer "one")
+            (format "%s dollar" (cap answer))        ;; the singular case
+            (format "%s dollars" (cap answer))))
+        (cap answer))))) ;; the plural case
 
+(defn -main
 
-(amount 9000)
+  "Given an amount in x dollars, I can print the string(English) representation
+  of that number. Current limitation 0 - 9999 and 0.00 to 9999.99"
+
+  [& args]
+  (print "Amount to translate ")
+  (print ">>> ")
+  (flush)
+  (let [n (read)
+        value (amount n)]
+    (if (not= :quit value)
+      (do
+        (println value)
+        (recur -main))
+      (System/exit 0))))
+
