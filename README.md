@@ -20,11 +20,11 @@ lein run
 
 ### TODO
 
-[ ] - use property-based testing library for better test coverage (aka clj/test.check or something similar)
+- use property-based testing library for better test coverage (aka clj/test.check or something similar)
 
-[ ] - simplify filter functions (its begging for an abstraction)
+- simplify filter functions (its begging for an abstraction)
 
-[ ] - add web interface
+- add web interface
 
-[ ] - add more precision
+- add more precision
 

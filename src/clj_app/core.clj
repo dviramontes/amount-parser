@@ -79,9 +79,9 @@
       (if (rational? x)
         (do
           (if (= answer "one")
-            (format "%s dollar" (cap answer))        ;; the singular case
-            (format "%s dollars" (cap answer))))
-        (cap answer))))) ;; the plural case
+            (format "%s dollar" (cap answer)) ;; the singular case
+            (format "%s dollars" (cap answer))));; the plural case
+        (cap answer)))))
 
 (defn -main
 
