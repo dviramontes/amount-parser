@@ -4,11 +4,11 @@
 
 (deftest decimate-tens-function-test
   (testing "Given 25 should result in 20"
-    (is (= (decimate-tens 25) 20) "some message if failed")))
+    (is (= (decimate-tens 25) 20))))
 
 (deftest decimate-hundreds-function-test
   (testing "Given 250 should result in 2"
-    (is (= (decimate-hundreds 250) 2) "some message if failed")))
+    (is (= (decimate-hundreds 250) 2))))
 
 (deftest get-n-after-decimal-point-test
   (testing "Given 2.01 and 2.10,
@@ -39,3 +39,8 @@
 (deftest irrational-amount-test
   (testing "Given 25.25, should result in.."
     (is (= (amount 25.25) "Twenty-five dollars with 25/100 cents"))))
+
+(deftest negative-number-test
+  (testing "Given a negative number, should result in Negative xyz amount"
+    (is (= (amount -110) "Negative one hundred and ten dollars"))
+    (is (= (amount -110.10) "Negative one hundred and ten dollars with 10/100 cents"))))

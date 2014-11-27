@@ -53,6 +53,7 @@
    (not (number? n)) :not-a-number
    (rational? n)(do
                   (cond
+                   (neg? n) (filter-amount (* -1 n))
                    (<= n 19) (zero-to-nineteen n)
                    (and (zero? (mod n 10))   (tens-filter n)) (tens (decimate-tens n))
                    (and (zero? (mod n 100))  (hundreds-filter n)) (str (zero-to-nineteen (decimate-hundreds n)) " hundred")
@@ -69,19 +70,31 @@
      (str (filter-amount (int (rationalize n))) " dollars with " (get-n-after-decimal-point n) "/100 cents"))))
 
 
+(filter-amount -12.2)
+
 (defn amount [x]
 
   " Given an amount, it converts it to the appropriate string Dollar / Cent representation."
 
   (let [answer (filter-amount x)
         cap #(clojure.string/capitalize %)]
-    (when (not= answer :not-a-number)
-      (if (rational? x)
-        (do
-          (if (= answer "one")
-            (format "%s dollar" (cap answer)) ;; the singular case
-            (format "%s dollars" (cap answer))));; the plural case
-        (cap answer)))))
+    (if
+     (not= answer :not-a-number)
+      (do
+        (cond
+         (neg? x) (do (if (rational? x)
+                        (format "Negative %s dollars" answer)
+                        (format "Negative %s" answer)))
+         (rational? x)
+           (do
+             (if (= answer "one")
+               (format "%s dollar" (cap answer)) ;; the singular case
+               (format "%s dollars" (cap answer))));; the plural case
+         (not (rational? x))(cap answer)))
+      "you have passed not a number")))
+
+
+(amount -3322.2)
 
 (defn -main
 
@@ -89,8 +102,7 @@
   of that number. Current limitation 0 - 9999 and 0.00 to 9999.99"
 
   [& args]
-  (print "Amount to translate ")
-  (print ">>> ")
+  (print "Amount to translate>>> ")
   (flush)
   (let [n (read)
         value (amount n)]
