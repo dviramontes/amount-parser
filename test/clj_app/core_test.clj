@@ -2,6 +2,9 @@
   (:require [clojure.test :refer :all]
             [clj-app.core :refer :all]))
 
+;; Unit Test
+;; ---------
+
 (deftest decimate-tens-function-test
   (testing "Given 25 should result in 20"
     (is (= (decimate-tens 25) 20))))
@@ -44,3 +47,4 @@
   (testing "Given a negative number, should result in Negative xyz amount"
     (is (= (amount -110) "Negative one hundred and ten dollars"))
     (is (= (amount -110.10) "Negative one hundred and ten dollars with 10/100 cents"))))
+
