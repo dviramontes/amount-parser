@@ -19,10 +19,10 @@
 
 ;; Property to test.check
 
-;; (def should-be-the-same-as-x
-;;   (prop/for-all [numbers (gen/vector gen/nat)]
-;;           ;; predicate
-;;           (= (first numbers) (peek numbers))))
+(def should-be-the-same-as-x
+  (prop/for-all [numbers (gen/vector gen/nat)]
+          ;; predicate
+          (= (first numbers) (peek numbers))))
 
 ;;(tc/quick-check 100 should-be-the-same-as-x)
 ;;(peek (list 1 2 3))
@@ -30,7 +30,5 @@
 
 (defspec foo
   100
-  (prop/for-all [numbers (gen/vector gen/nat)]
-          ;; predicate
-          (= (first numbers) (peek numbers))))
+  should-be-the-same-as-x)
 

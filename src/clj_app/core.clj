@@ -1,5 +1,8 @@
 (ns clj-app.core
-  (:gen-class))
+  (:gen-class)
+  (:require
+            [translate.google :refer :all]
+            [environ.core :refer [env]]))
 
 (def zero-to-nineteen
   {0 "zero"
@@ -50,6 +53,7 @@
   "Defines the filtering rules for determining Dollar amount"
 
   (cond
+   (= :quit n) :quit
    (not (number? n)) :not-a-number
    (rational? n)
    (do
@@ -72,8 +76,6 @@
        (str (filter-amount (int (rationalize n))) " dollars with " (get-n-after-decimal-point n) "/100 cents"))))
 
 
-(filter-amount -12.2)
-
 (defn amount [x]
 
   " Given an amount, it converts it to the appropriate string Dollar / Cent representation."
@@ -95,10 +97,7 @@
          (not (rational? x))(cap answer)))
       "you have passed not a number")))
 
-
-(amount -3322.22)
-
-(= (reverse (reverse [1 2 3])) [1 2 3])
+(println "Type :quit to exit program or")
 
 (defn -main
 
@@ -106,7 +105,7 @@
   of that number. Current limitation 0 - 9999 and 0.00 to 9999.99"
 
   [& args]
-  (print "Amount to translate >>> ")
+  (print "Enter amount to translate >>> ")
   (flush)
   (let [n (read)
         value (amount n)]
@@ -116,5 +115,10 @@
         (recur -main))
       (System/exit 0))))
 
-  (map str [1,2,3,4])
+
+(def test-translate (translate "hello" { :key (env :google-translate-api-key)
+                     :source "en"
+                     :target "es"
+                    }))
+
 

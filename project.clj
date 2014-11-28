@@ -4,10 +4,14 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/test.check "0.6.1"]]
+                 [org.clojure/test.check "0.6.1"]
+                 [translate "0.3.2"]
+                 [environ "1.0.0"]]
   :test-selectors {:default (complement :integration)
                    :integration :integration
                    :all (constantly true)}
+
+  :plugins [[lein-environ "1.0.0"]]
   :main ^:skip-aot clj-app.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
