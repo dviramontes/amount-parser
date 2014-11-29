@@ -1,6 +1,5 @@
 # Amount-Parser
 ## Translates a number into its text based representation.
----
 
 ### Requirements:
 

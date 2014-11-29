@@ -80,19 +80,21 @@
 
   (let [answer (filter-amount x)
         cap #(clojure.string/capitalize %)]
-    (if (or (not= answer :not-a-number) (not= answer :number-out-of-range) (not= :quit))
-      (do
-        (cond
-         (neg? x) (do (if (rational? x)
-                        (format "Negative %s dollars" answer)
-                        (format "Negative %s" answer)))
-         (rational? x)
-         (do
-           (if (= answer "one")
-             (format "%s dollar" (cap answer)) ;; the singular case
-             (format "%s dollars" (cap answer))));; the plural case
-         (not (rational? x))(cap answer)))
-      "you have passed not a number")))
+    (cond (= answer :not-a-number) "you have passed not a number"
+          (= answer :quit) :quit
+          (= answer :number-out-of-range) "number-out-of-range"
+          :else (do
+            (cond
+             (neg? x) (do (if (rational? x)
+                            (format "Negative %s dollars" answer)
+                            (format "Negative %s" answer)))
+             (rational? x)
+             (do
+               (if (= answer "one")
+                 (format "%s dollar" (cap answer)) ;; the singular case
+                 (format "%s dollars" (cap answer))));; the plural case
+             (not (rational? x))(cap answer)))
+          )))
 
 
 (println "Type :quit to exit program")

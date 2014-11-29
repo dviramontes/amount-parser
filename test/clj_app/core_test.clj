@@ -48,3 +48,12 @@
     (is (= (amount -110) "Negative one hundred and ten dollars"))
     (is (= (amount -110.10) "Negative one hundred and ten dollars with 10/100 cents"))))
 
+(deftest passing-a-string
+  (testing "Given a str, should return :not-a-number key message"
+    (is (= (amount "str") "you have passed not a number"))))
+
+(deftest out-of-range
+  (testing "Given a number of out range, should result in message"
+    (is (= (amount 100000) "number-out-of-range"))
+    (is (= (amount -100000) "number-out-of-range"))))
+
