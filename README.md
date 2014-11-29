@@ -1,24 +1,28 @@
-## Translates a number into its text based presentation
+# Amount-Parser
+## Translates a number into its text based representation.
+---
 
-### Points of interest
+### Requirements:
 
-- src/clj_app/core.clj
+- [Leineghen](http://leiningen.org/#install)
+- [Java](https://java.com/en/download/index.jsp) 
 
-- test/clj_app/core_test.clj
+### Installation:
 
-### Installation
+`$ lein deps`
 
-lein deps
+### Tests:
 
-### Tests
+`$ lein test`
 
-lein test
+### Interactive Mode:
 
-### Interactive
+`$ lein run`
 
-lein run
 
-### TODO
+---
+
+### TODO:
 
 - use property-based testing library for better test coverage (aka clj/test.check or something similar)
 

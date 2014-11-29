@@ -5,13 +5,10 @@
             [environ.core :refer [env]]))
 
 (def zero-to-nineteen
-  {0 "zero"
-   1 "one",  2 "two",  3 "three",  4 "four",
-   5 "five", 6 "six",  7 "seven",  8 "eight",
-   9 "nine", 10 "ten", 11 "eleven",12 "twelve",
-   13 "thirteen", 14 "fourteen",   15 "fifteen",
-   16 "sixteen", 17 "seventeen", 18 "eighteen",
-   19 "nineteen"})
+  (zipmap (range 19) ["zero" "one" "two" "three" "four" "five"
+           "six" "seven" "eight" "nine" "ten" "eleven"
+           "twelve" "thirteen" "fourteen" "fifteen" "sixteen"
+           "seventeen" "eighteen" "nineteen"]))
 
 (def tens   {20 "twenty", 30 "thirty",  40 "fourty", 50 "fifty",
              60 "sixty" , 70 "seventy", 80 "eighty", 90 "ninety"})
@@ -27,7 +24,7 @@
 
 (defn get-n-after-decimal-point [n]
 
-  " Get x.0 digits,
+  " Get 0.00 digits,
   up to 2 decimal places"
 
   (int ;; make it a whole number
@@ -55,6 +52,7 @@
   (cond
    (= :quit n) :quit
    (not (number? n)) :not-a-number
+   (or (< n -9999.99) (> n 9999.99)) :number-out-of-range
    (rational? n)
    (do
      (cond
@@ -78,12 +76,11 @@
 
 (defn amount [x]
 
-  " Given an amount, it converts it to the appropriate string Dollar / Cent representation."
+  " Given an amount, it converts it to the appropriate string Dollar/Cent representation."
 
   (let [answer (filter-amount x)
         cap #(clojure.string/capitalize %)]
-    (if
-      (not= answer :not-a-number)
+    (if (or (not= answer :not-a-number) (not= answer :number-out-of-range) (not= :quit))
       (do
         (cond
          (neg? x) (do (if (rational? x)
@@ -97,7 +94,10 @@
          (not (rational? x))(cap answer)))
       "you have passed not a number")))
 
-(println "Type :quit to exit program or")
+
+(println "Type :quit to exit program")
+(println "Currently, this program only supports floats or
+         ints from +-0.00 to +-9999.99")
 
 (defn -main
 
@@ -115,10 +115,10 @@
         (recur -main))
       (System/exit 0))))
 
+;; (env :google-translate-api-key)
 
-(def test-translate (translate "hello" { :key (env :google-translate-api-key)
+#_(def foo(translate "hello world!" { :key (env :google-translate-api-key)
                      :source "en"
                      :target "es"
                     }))
-
 
