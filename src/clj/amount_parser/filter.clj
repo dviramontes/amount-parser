@@ -1,8 +1,8 @@
 (ns amount-parser.filter
   (:gen-class)
   (:require
-            [translate.google :refer :all]
-            [environ.core :refer [env]]))
+   [translate.google :refer :all]
+   [environ.core :refer [env]]))
 
 (def zero-to-nineteen
   (zipmap (range 19) ["zero" "one" "two" "three" "four" "five"
@@ -13,7 +13,6 @@
 (def tens
   (zipmap (range 20 100 10) ["twenty" "thirty" "fourty" "fifty",
              "sixty" "seventy" "eighty" "ninety"]))
-(seq tens)
 
 (defn decimate-tens [n]
   (* (int (/ n 10)) 10))

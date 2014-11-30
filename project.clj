@@ -24,7 +24,7 @@
 
   :test-selectors {:default (complement :integration)
                  :integration :integration
-                 :all (constantly true)}                
+                 :all (constantly true)}
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-environ "1.0.0"]]

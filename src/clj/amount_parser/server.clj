@@ -1,21 +1,31 @@
 (ns amount-parser.server
   (:require [clojure.java.io :as io]
             [amount-parser.dev :refer [is-dev? inject-devmode-html browser-repl start-figwheel]]
-            [compojure.core :refer [GET defroutes]]
+            [compojure.core :refer [GET defroutes]] ;; you can include verbs here like POST PUT
             [compojure.route :refer [resources]]
             [compojure.handler :refer [api]]
             [net.cgrand.enlive-html :refer [deftemplate]]
             [ring.middleware.reload :as reload]
             [environ.core :refer [env]]
-            [org.httpkit.server :refer [run-server]]))
+            [ring.handler.dump :refer [handle-dump]] ;; see formated req for debugging
+            [org.httpkit.server :refer [run-server]]
+            [amount-parser.filter :refer :all :exclude [-main]]))
 
 (deftemplate page
   (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
 
+(defn filter-handler [req]
+  (let [number (get-in req [:route-params :number])]
+    {:status 200
+     :body (str "you requested: " (amount (read-string number)))
+     :headers {}}))
+
 (defroutes routes
   (resources "/")
   (resources "/react" {:root "react"})
+  (GET "/amount/:number" [] filter-handler)
   (GET "/*" req (page)))
+  ;;(POST "/filter" [n] handle-dump))
 
 (def http-handler
   (if is-dev?
