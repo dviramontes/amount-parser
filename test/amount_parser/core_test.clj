@@ -1,6 +1,6 @@
-(ns clj-app.core-test
+(ns amount-parser.core-test
   (:require [clojure.test :refer :all]
-            [clj-app.core :refer :all]))
+            [amount-parser.filter :refer :all]))
 
 ;; Unit Test
 ;; ---------

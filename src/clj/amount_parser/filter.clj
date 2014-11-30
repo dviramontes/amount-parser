@@ -1,10 +1,8 @@
-(ns clj-app.core
+(ns amount-parser.filter
   (:gen-class)
   (:require
             [translate.google :refer :all]
-            [environ.core :refer [env]]
-            ;;[ring.adapter.jetty :as jetty]
-   ))
+            [environ.core :refer [env]]))
 
 (def zero-to-nineteen
   (zipmap (range 19) ["zero" "one" "two" "three" "four" "five"
@@ -15,6 +13,7 @@
 (def tens
   (zipmap (range 20 100 10) ["twenty" "thirty" "fourty" "fifty",
              "sixty" "seventy" "eighty" "ninety"]))
+(seq tens)
 
 (defn decimate-tens [n]
   (* (int (/ n 10)) 10))
@@ -99,7 +98,6 @@
              (not (rational? x))(cap answer)))
           )))
 
-
 (println "Type :quit to exit program")
 (println "Currently, this program only supports floats or
          ints from +-0.00 to +-9999.99")
@@ -120,12 +118,10 @@
         (recur -main))
       (System/exit 0))))
 
-(env :google-translate-api-key)
+#_(env :google-translate-api-key)
 
 #_(def foo(translate "hello world!" { :key (env :google-translate-api-key)
                      :source "en"
                      :target "es"
                     }))
-
-((fn [n] (time (map #(* % %) (filter odd? (range n))))) 20)
 

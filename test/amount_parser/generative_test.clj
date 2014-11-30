@@ -1,6 +1,6 @@
-(ns clj-app.generative-test
+(ns amount-parser.generative-test
   (:require
-            [clj-app.core :refer :all]
+            [amount-parser.filter :refer :all]
             [clojure.test.check :as tc]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop]
@@ -20,7 +20,7 @@
 ;; Property to test.check
 
 (def should-be-the-same-as-x
-  (prop/for-all [numbers (gen/vector gen/nat)]
+  (prop/for-all [numbers (gen/list gen/nat)]
           ;; predicate
           (= (first numbers) (peek numbers))))
 
