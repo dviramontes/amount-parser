@@ -2,7 +2,9 @@
   (:gen-class)
   (:require
             [translate.google :refer :all]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            ;;[ring.adapter.jetty :as jetty]
+   ))
 
 (def zero-to-nineteen
   (zipmap (range 19) ["zero" "one" "two" "three" "four" "five"
@@ -10,8 +12,9 @@
            "twelve" "thirteen" "fourteen" "fifteen" "sixteen"
            "seventeen" "eighteen" "nineteen"]))
 
-(def tens   {20 "twenty", 30 "thirty",  40 "fourty", 50 "fifty",
-             60 "sixty" , 70 "seventy", 80 "eighty", 90 "ninety"})
+(def tens
+  (zipmap (range 20 100 10) ["twenty" "thirty" "fourty" "fifty",
+             "sixty" "seventy" "eighty" "ninety"]))
 
 (defn decimate-tens [n]
   (* (int (/ n 10)) 10))
@@ -82,7 +85,7 @@
         cap #(clojure.string/capitalize %)]
     (cond (= answer :not-a-number) "you have passed not a number"
           (= answer :quit) :quit
-          (= answer :number-out-of-range) "number-out-of-range"
+          (= answer :number-out-of-range) "Number-out-of-range (< n -9999.99) (> n 9999.99)"
           :else (do
             (cond
              (neg? x) (do (if (rational? x)
@@ -117,10 +120,12 @@
         (recur -main))
       (System/exit 0))))
 
-;; (env :google-translate-api-key)
+(env :google-translate-api-key)
 
 #_(def foo(translate "hello world!" { :key (env :google-translate-api-key)
                      :source "en"
                      :target "es"
                     }))
+
+((fn [n] (time (map #(* % %) (filter odd? (range n))))) 20)
 

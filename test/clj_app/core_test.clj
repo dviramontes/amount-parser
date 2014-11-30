@@ -54,6 +54,6 @@
 
 (deftest out-of-range
   (testing "Given a number of out range, should result in message"
-    (is (= (amount 100000) "number-out-of-range"))
-    (is (= (amount -100000) "number-out-of-range"))))
+    (is (= (amount 100000) "Number-out-of-range (< n -9999.99) (> n 9999.99)"))
+    (is (= (amount -100000) "Number-out-of-range (< n -9999.99) (> n 9999.99)"))))
 
