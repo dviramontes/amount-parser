@@ -4,21 +4,18 @@
             [om-tools.core :refer-macros [defcomponent]]
             [kioo.om :as kioo :include-macros true]))
 
-(defonce app-state (atom 1234.22))
-
 (defn fetch-amount [n]
-  (let [callback (fn [d] (.-responseText d))]
-  (->
-   (.get js/$ (str "/amount/" n))
-   (.success callback))))
+  (let [callback (fn [data] (do
+                           (.log js/console data)
+                           (set! app-state data)))]
+   (.get js/$ (str "/amount/" n) callback)))
 
-;;(.log js/console (fetch-amount 100.00))
+(def app-state (atom (fetch-amount 1234.22)))
 
 (kioo/deftemplate main "index.html" []
- {[:pre.result] (kioo/content 123.22)})
+ {[:pre.result] (kioo/content @app-state)})
 
 (defn app [data owner]
-  (fetch-amount data)
   (om/component (main)))
 
 (om/root app app-state {:target (.-body js/document)})

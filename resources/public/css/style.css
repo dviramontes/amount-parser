@@ -1,5 +1,14 @@
 body{
   /* color: white; */
+  background :rgb(254, 247, 226);
+}
+
+a{
+  color:rgb(220, 57, 0);
+}
+
+pre{
+    background :rgb(254, 247, 226);
 }
 
 h1 {
