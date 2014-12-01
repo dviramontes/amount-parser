@@ -20,6 +20,7 @@
                  [leiningen "2.5.0"]
                  [http-kit "2.1.19"]
                  [prismatic/om-tools "0.3.3"]
+                 [kioo "0.4.0"]
                  [translate "0.3.2"]]
 
   :test-selectors {:default (complement :integration)
