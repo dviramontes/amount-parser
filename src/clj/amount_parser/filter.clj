@@ -5,7 +5,7 @@
    [environ.core :refer [env]]))
 
 (def zero-to-nineteen
-  (zipmap (range 19) ["zero" "one" "two" "three" "four" "five"
+  (zipmap (range 20) ["zero" "one" "two" "three" "four" "five"
            "six" "seven" "eight" "nine" "ten" "eleven"
            "twelve" "thirteen" "fourteen" "fifteen" "sixteen"
            "seventeen" "eighteen" "nineteen"]))

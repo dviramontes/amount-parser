@@ -23,11 +23,9 @@
 
 ### TODO:
 
-- use property-based testing library for better test coverage (aka clj/test.check or something similar)
+- write property-based (generative) tests
 
-- simplify filter functions (its begging for an abstraction)
+- add more precision 
 
-- add web interface
-
-- add more precision
+- add /translate resource
 

@@ -1,16 +1,23 @@
 body{
-  /* color: white; */
   background :rgb(254, 247, 226);
 }
 
 a{
-  color:rgb(220, 57, 0);
+   color: firebrick !important;
 }
 
 pre{
     background :rgb(254, 247, 226);
+    font-size : 100%;
+    min-height: 46px;
 }
 
-h1 {
-  /*text-decoration: underline;*/
+h1{
+   color: firebrick !important;
 }
+
+h3, p{
+  color: DimGray;
+}
+
+

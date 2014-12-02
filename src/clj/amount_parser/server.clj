@@ -17,7 +17,7 @@
 (defn filter-handler [req]
   (let [number (get-in req [:route-params :number])]
     {:status 200
-     :body (str "you requested: " (amount (read-string number)))
+     :body (str (amount (read-string number)))
      :headers {}}))
 
 (defroutes routes
