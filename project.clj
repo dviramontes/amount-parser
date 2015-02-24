@@ -12,16 +12,19 @@
                  [ring "1.3.1"]
                  [compojure "1.2.0"]
                  [enlive "1.1.5"]
-                 [om "0.7.3"]
+                 ; [om "0.7.3"]
+                 ;[reagent "0.5.0-alpha3"]
+                 [quiescent "0.1.1"]
                  [figwheel "0.1.4-SNAPSHOT"]
                  [environ "1.0.0"]
                  [com.cemerick/piggieback "0.1.3"]
                  [weasel "0.4.0-SNAPSHOT"]
                  [leiningen "2.5.0"]
                  [http-kit "2.1.19"]
-                 [prismatic/om-tools "0.3.3"]
-                 [kioo "0.4.0"]
-                 [translate "0.3.2"]]
+                 ; [prismatic/om-tools "0.3.3"]
+                 [kioo "0.4.1-SNAPSHOT"]
+                 ; [translate "0.3.2"]
+                 ]
 
   :test-selectors {:default (complement :integration)
                  :integration :integration
@@ -38,7 +41,9 @@
                              :compiler {:output-to     "resources/public/js/app.js"
                                         :output-dir    "resources/public/js/out"
                                         :source-map    "resources/public/js/out.js.map"
-                                        :preamble      ["react/react.min.js"]
+                                        ; :preamble      ["react/react.min.js"]
+                                        :preamble ["reagent/react.js"]
+                                        ; :preamble ["reagent/react.min.js"]
                                         :externs       ["react/externs/react.js"]
                                         :optimizations :none
                                         :pretty-print  true}}}}

@@ -1,7 +1,6 @@
 (ns amount-parser.filter
   (:gen-class)
   (:require
-   [translate.google :refer :all]
    [environ.core :refer [env]]))
 
 (def zero-to-nineteen
