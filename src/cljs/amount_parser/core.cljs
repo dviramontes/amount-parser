@@ -2,7 +2,7 @@
   (:require [quiescent :as q :include-macros true]
             [quiescent.dom :as d]))
 
-(declare app-state) ; var name with no binding
+;; (declare app-state) ; var name with no binding
 
 (defn get-element-by-id [id]
   (.getElementById js/document id))
@@ -12,7 +12,9 @@
     {:value "One thousand two hundred and thirty-four dollars with 22/100 cents"}))
 
 (defn fetch-amount [n]
-  (let [callback (fn [new-data] (.log js/console new-data))]
+  (let [callback (fn [new-data] (do 
+                                  ;; (.log js/console new-data)
+                                  (swap! app-state assoc :value new-data)))]
   (.get js/$ (str "/amount/" n) callback)))
 
 (q/defcomponent input-amount []
@@ -29,5 +31,13 @@
 (q/defcomponent main [value]
   (show-amount (:value value)))
       
-(q/render (main @app-state) (.getElementById js/document "app"))
+(defn re-render [with-state]
+  (.requestAnimationFrame 
+   js/window 
+   (fn [] (q/render (main with-state) (.getElementById js/document "app")))))
 
+(re-render @app-state)
+
+(add-watch app-state ::render
+           (fn [_ _ _ data]
+             (re-render data)))

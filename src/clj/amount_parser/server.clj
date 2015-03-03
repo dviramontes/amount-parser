@@ -16,13 +16,14 @@
 
 (defn filter-handler [req]
   (let [number (get-in req [:route-params :number])]
-    {:status 200
+   {:status 200
      :body (str (amount (read-string number)))
      :headers {}}))
 
 (defroutes routes
   (resources "/")
   (resources "/react" {:root "react"})
+  (GET "/amount/" [] "...")
   (GET "/amount/:number" [] filter-handler)
   (GET "/*" req (page)))
   ;;(POST "/filter" [n] handle-dump))
